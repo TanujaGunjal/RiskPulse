@@ -1,0 +1,710 @@
+/* ============================================================================
+   Risk Scorer Component Styles
+   ============================================================================ */
+
+.riskScorer {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+  padding: 2rem;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto',
+    sans-serif;
+}
+
+/* ============================================================================
+   Header
+   ============================================================================ */
+
+.header {
+  margin-bottom: 2rem;
+  text-align: center;
+}
+
+.header h1 {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: #1f2937;
+  margin: 0;
+}
+
+.subtitle {
+  font-size: 1rem;
+  color: #6b7280;
+  margin: 0.5rem 0 0 0;
+}
+
+/* ============================================================================
+   Container & Layout
+   ============================================================================ */
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+}
+
+.section {
+  background: white;
+  border-radius: 0.75rem;
+  padding: 2rem;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.section h2 {
+  margin: 0 0 1.5rem 0;
+  font-size: 1.5rem;
+  color: #1f2937;
+  font-weight: 600;
+}
+
+.section h3 {
+  margin: 1.5rem 0 1rem 0;
+  font-size: 1rem;
+  color: #374151;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* ============================================================================
+   Form Styles
+   ============================================================================ */
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.formRow {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+}
+
+.formGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.formGroup label {
+  font-weight: 600;
+  color: #374151;
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.formGroup input,
+.formGroup select {
+  padding: 0.75rem;
+  border: 2px solid #e5e7eb;
+  border-radius: 0.375rem;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+  font-family: inherit;
+}
+
+.formGroup input:focus,
+.formGroup select:focus {
+  outline: none;
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+.formGroup input::placeholder {
+  color: #9ca3af;
+}
+
+.formGroup input:disabled,
+.formGroup select:disabled {
+  background-color: #f9fafb;
+  cursor: not-allowed;
+  opacity: 0.7;
+}
+
+/* ============================================================================
+   Checkbox Styles
+   ============================================================================ */
+
+.checkboxGroup {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+.checkboxLabel {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  cursor: pointer;
+  font-weight: 500;
+  color: #374151;
+  transition: color 0.3s ease;
+}
+
+.checkboxLabel:hover {
+  color: #3b82f6;
+}
+
+.checkboxLabel input[type='checkbox'] {
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
+  accent-color: #3b82f6;
+}
+
+/* ============================================================================
+   Error Messages
+   ============================================================================ */
+
+.errorMessage {
+  background: #fee2e2;
+  border: 1px solid #fecaca;
+  border-radius: 0.375rem;
+  padding: 1rem;
+  color: #991b1b;
+  font-weight: 600;
+}
+
+/* ============================================================================
+   Buttons
+   ============================================================================ */
+
+.formButtons {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.button {
+  padding: 0.875rem 1.5rem;
+  border: none;
+  border-radius: 0.375rem;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.submitButton {
+  background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+  color: white;
+  box-shadow: 0 4px 6px rgba(59, 130, 246, 0.2);
+}
+
+.submitButton:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 12px rgba(59, 130, 246, 0.3);
+}
+
+.submitButton:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+.submitButton:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.resetButton {
+  background: #f3f4f6;
+  color: #374151;
+  border: 2px solid #e5e7eb;
+}
+
+.resetButton:hover:not(:disabled) {
+  background: #e5e7eb;
+}
+
+.resetButton:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* ============================================================================
+   Results Section
+   ============================================================================ */
+
+.resultsSection {
+  animation: slideIn 0.4s ease;
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.resultHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+  padding: 1rem;
+  background: #f9fafb;
+  border-radius: 0.375rem;
+}
+
+.caseIdResult {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #1f2937;
+}
+
+/* ============================================================================
+   Score Ring
+   ============================================================================ */
+
+.scoreRingWrapper {
+  display: flex;
+  justify-content: center;
+  margin: 2rem 0;
+}
+
+.scoreRingContainer {
+  position: relative;
+  width: 200px;
+  height: 200px;
+}
+
+.scoreRingSvg {
+  width: 100%;
+  height: 100%;
+}
+
+.scoreRingProgress {
+  animation: fillScore 2s ease;
+  transform-origin: 50% 50%;
+  transform: rotate(-90deg);
+}
+
+@keyframes fillScore {
+  from {
+    stroke-dashoffset: calc(2 * 3.14159 * 45);
+  }
+}
+
+.scoreRingText {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.scoreValue {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #1f2937;
+}
+
+.scoreLabel {
+  font-size: 0.875rem;
+  color: #6b7280;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* ============================================================================
+   Risk Tier Badge
+   ============================================================================ */
+
+.riskTierBadge {
+  display: inline-block;
+  padding: 0.5rem 1rem;
+  border-radius: 0.375rem;
+  font-weight: 700;
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.badge-low {
+  background: #d1fae5;
+  color: #065f46;
+}
+
+.badge-medium {
+  background: #fef3c7;
+  color: #92400e;
+}
+
+.badge-high {
+  background: #fed7aa;
+  color: #92400e;
+}
+
+.badge-critical {
+  background: #fee2e2;
+  color: #991b1b;
+}
+
+/* ============================================================================
+   Scores Grid
+   ============================================================================ */
+
+.scoresGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 1rem;
+  margin: 2rem 0;
+}
+
+.scoreCard {
+  background: #f9fafb;
+  border: 1px solid #e5e7eb;
+  border-radius: 0.375rem;
+  padding: 1rem;
+  transition: all 0.3s ease;
+}
+
+.scoreCard:hover {
+  border-color: #3b82f6;
+  box-shadow: 0 2px 8px rgba(59, 130, 246, 0.1);
+}
+
+.scoreCardHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.75rem;
+}
+
+.scoreCardHeader h4 {
+  margin: 0;
+  font-size: 0.9rem;
+  color: #374151;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  font-weight: 700;
+}
+
+.scoreCardValue {
+  font-size: 1rem;
+  font-weight: 700;
+  color: #3b82f6;
+}
+
+.scoreCardBar {
+  width: 100%;
+  height: 4px;
+  background: #e5e7eb;
+  border-radius: 2px;
+  overflow: hidden;
+  margin-bottom: 0.5rem;
+}
+
+.scoreCardBarFill {
+  height: 100%;
+  background: linear-gradient(90deg, #3b82f6, #2563eb);
+  border-radius: 2px;
+  transition: width 1s ease;
+}
+
+.scoreCardDescription {
+  margin: 0;
+  font-size: 0.75rem;
+  color: #9ca3af;
+}
+
+/* ============================================================================
+   Formula Box
+   ============================================================================ */
+
+.formulaBox {
+  background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
+  border: 2px solid #3b82f6;
+  border-radius: 0.375rem;
+  padding: 1.5rem;
+  margin: 2rem 0;
+}
+
+.formulaBox h3 {
+  margin: 0 0 1rem 0;
+  color: #1e40af;
+}
+
+.formula {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+  color: #1e40af;
+  font-weight: 600;
+  font-size: 0.95rem;
+}
+
+.formulaLabel {
+  font-weight: 700;
+}
+
+.formulaEquals {
+  font-size: 1.2rem;
+}
+
+.formulaTerms {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem;
+  flex: 1;
+}
+
+.formulaTerm {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  background: white;
+  padding: 0.375rem 0.75rem;
+  border-radius: 0.25rem;
+}
+
+.weight {
+  color: #dc2626;
+  font-weight: 700;
+}
+
+.component {
+  color: #1e40af;
+  font-weight: 700;
+}
+
+.plus {
+  font-size: 1rem;
+  color: #1e40af;
+}
+
+/* ============================================================================
+   Explanation Box
+   ============================================================================ */
+
+.explanationBox {
+  background: #fffbeb;
+  border: 2px solid #fbbf24;
+  border-radius: 0.375rem;
+  padding: 1.5rem;
+  margin: 2rem 0;
+}
+
+.explanationBox h3 {
+  margin: 0 0 1rem 0;
+  color: #92400e;
+}
+
+.explanationText {
+  margin: 0;
+  padding: 1rem;
+  background: white;
+  border-radius: 0.25rem;
+  border-left: 4px solid #fbbf24;
+  color: #374151;
+  font-size: 0.875rem;
+  line-height: 1.6;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  font-family: 'Courier New', monospace;
+}
+
+/* ============================================================================
+   Violations Box
+   ============================================================================ */
+
+.violationsBox {
+  background: #fee2e2;
+  border: 2px solid #fca5a5;
+  border-radius: 0.375rem;
+  padding: 1.5rem;
+  margin: 2rem 0;
+}
+
+.violationsBox h3 {
+  margin: 0 0 1rem 0;
+  color: #991b1b;
+}
+
+.violationsList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.violationItem {
+  padding: 0.75rem 1rem;
+  background: white;
+  border-left: 4px solid #dc2626;
+  color: #7f1d1d;
+  font-weight: 500;
+  border-radius: 0.25rem;
+}
+
+/* ============================================================================
+   New Assessment Button
+   ============================================================================ */
+
+.newAssessmentButton {
+  width: 100%;
+  padding: 1rem;
+  margin-top: 2rem;
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  color: white;
+  border: none;
+  border-radius: 0.375rem;
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  box-shadow: 0 4px 6px rgba(16, 185, 129, 0.2);
+}
+
+.newAssessmentButton:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 12px rgba(16, 185, 129, 0.3);
+}
+
+.newAssessmentButton:active {
+  transform: translateY(0);
+}
+
+/* ============================================================================
+   Loading State
+   ============================================================================ */
+
+.loadingContainer {
+  grid-column: 1 / -1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  min-height: 400px;
+  color: #6b7280;
+}
+
+.spinner {
+  width: 50px;
+  height: 50px;
+  border: 4px solid #e5e7eb;
+  border-top-color: #3b82f6;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin-bottom: 1rem;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* ============================================================================
+   Responsive Design
+   ============================================================================ */
+
+@media (max-width: 1024px) {
+  .container {
+    grid-template-columns: 1fr;
+  }
+
+  .formRow {
+    grid-template-columns: 1fr;
+  }
+
+  .checkboxGroup {
+    grid-template-columns: 1fr;
+  }
+
+  .scoresGrid {
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  }
+}
+
+@media (max-width: 768px) {
+  .riskScorer {
+    padding: 1rem;
+  }
+
+  .header h1 {
+    font-size: 1.75rem;
+  }
+
+  .section {
+    padding: 1.5rem;
+  }
+
+  .formRow {
+    grid-template-columns: 1fr;
+  }
+
+  .formButtons {
+    grid-template-columns: 1fr;
+  }
+
+  .formula {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .formulaTerms {
+    width: 100%;
+    flex-direction: column;
+  }
+
+  .formulaTerm {
+    width: 100%;
+  }
+
+  .resultHeader {
+    flex-direction: column;
+    gap: 1rem;
+    align-items: flex-start;
+  }
+
+  .scoresGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 480px) {
+  .header h1 {
+    font-size: 1.5rem;
+  }
+
+  .checkboxGroup {
+    grid-template-columns: 1fr;
+  }
+
+  .scoresGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .scoreValue {
+    font-size: 1.5rem;
+  }
+
+  .section h3 {
+    font-size: 0.85rem;
+  }
+
+  .button {
+    padding: 0.75rem 1rem;
+    font-size: 0.9rem;
+  }
+}

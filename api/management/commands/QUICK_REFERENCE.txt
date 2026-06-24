@@ -1,0 +1,315 @@
+"""
+seed_db QUICK REFERENCE CARD
+=============================
+
+BASIC COMMANDS
+--------------
+
+# Load default CSV file
+python manage.py seed_db
+
+# Load custom CSV
+python manage.py seed_db --csv-path /path/to/file.csv
+
+# Load with progress (every 1000 rows)
+python manage.py seed_db --csv-path data.csv
+
+# Clear and reload
+python manage.py seed_db --csv-path data.csv --clear
+
+# Test with first 100 rows
+python manage.py seed_db --limit 100
+
+# Combine options
+python manage.py seed_db --csv-path data.csv --clear --limit 1000
+
+COMMON SCENARIOS
+----------------
+
+Scenario 1: First time setup with test data
+    python manage.py migrate
+    python manage.py seed_db \\
+        --csv-path api/management/commands/sample_data.csv \\
+        --clear
+
+Scenario 2: Load production data
+    python manage.py seed_db --csv-path /var/data/hcfd_results.csv
+
+Scenario 3: Replace all data
+    python manage.py seed_db --csv-path data.csv --clear
+
+Scenario 4: Incremental loading (safe, no duplicates)
+    python manage.py seed_db --csv-path batch1.csv
+    python manage.py seed_db --csv-path batch2.csv
+    python manage.py seed_db --csv-path batch3.csv
+
+Scenario 5: Test before large load
+    python manage.py seed_db --csv-path data.csv --limit 1000
+    python manage.py shell < verify_seed.py
+    # If OK, load full:
+    python manage.py seed_db --csv-path data.csv
+
+Scenario 6: Backup, clear, and reload
+    python manage.py dumpdata > backup.json
+    python manage.py seed_db --csv-path data.csv --clear
+    python manage.py shell < verify_seed.py
+
+VERIFICATION & MONITORING
+---------------------------
+
+# Check how many records were loaded
+python manage.py shell
+>>> from models import Transaction, Alert
+>>> Transaction.objects.count()
+>>> Alert.objects.count()
+
+# Run full verification
+python manage.py shell < verify_seed.py
+
+# Check risk distribution
+python manage.py shell
+>>> from django.db.models import Count
+>>> Transaction.objects.values('risk_tier').annotate(count=Count('id'))
+
+# Find recent transactions
+python manage.py shell
+>>> Transaction.objects.order_by('-created_at')[:10]
+
+# List unresolved alerts
+python manage.py shell
+>>> Alert.objects.filter(is_resolved=False).count()
+
+ERROR RECOVERY
+--------------
+
+# If CSV file not found
+# - Check file path is correct
+# - Use absolute path: --csv-path /home/user/data.csv
+# - Or relative from project: --csv-path data/results.csv
+
+# If "missing required columns"
+# - Verify CSV has all required headers
+# - Check column names (case-sensitive)
+# - See sample_data.csv for format
+
+# If partial load (some rows errored)
+# - Check error messages in output
+# - Fix CSV and retry with --csv-path
+# - Idempotent: won't duplicate fixed rows
+
+# If database locked (SQLite)
+# - Close other Django processes
+# - Try again
+# - Last resort: delete db.sqlite3, recreate
+
+HELPER SCRIPTS
+--------------
+
+# Linux/Mac
+bash api/management/commands/run_seed_db.sh
+bash api/management/commands/run_seed_db.sh --csv-path data.csv
+bash api/management/commands/run_seed_db.sh --clear
+
+# Windows
+run_seed_db.bat
+run_seed_db.bat --csv-path data.csv
+run_seed_db.bat --clear
+
+PERFORMANCE NOTES
+-----------------
+
+Small files (< 1K rows):    Few seconds
+Medium files (10K rows):     30-60 seconds  
+Large files (100K+ rows):    Several minutes
+
+Use --limit for testing first on large files:
+    python manage.py seed_db --csv-path huge.csv --limit 1000
+
+For very large files, consider:
+    1. Split into chunks: split -l 50000 large.csv chunk_
+    2. Load chunks: python manage.py seed_db --csv-path chunk_aa
+    3. Load incrementally (safe because idempotent)
+
+CSV REQUIREMENTS CHECKLIST
+--------------------------
+
+✓ File exists at specified path
+✓ File is readable (permissions OK)
+✓ Headers match exactly (case-sensitive):
+  - caseid
+  - age
+  - wealth_idx
+  - education
+  - residence
+  - has_diabetes
+  - has_htn
+  - DVS
+  - TNS
+  - ICS
+  - CCS
+  - HCFD_score
+  - rule_score
+  - anomaly_score
+  - final_risk
+  - risk_tier
+  - explanation
+
+✓ Data types correct:
+  - caseid: text
+  - age: number (integer)
+  - wealth_idx: number (decimal)
+  - has_diabetes, has_htn: boolean (true/false, 0/1, yes/no)
+  - DVS, TNS, ICS, CCS, HCFD_score, rule_score, anomaly_score, final_risk: number (decimal, 0-1)
+  - risk_tier: text (low/medium/high/critical)
+  - explanation: text
+
+✓ No duplicate caseid values (unless using incremental loading)
+✓ No required fields are NULL
+
+WHAT GETS CREATED
+-----------------
+
+For each CSV row:
+- 1 Transaction object
+- 1 Alert object (if final_risk > 0.75)
+- 1 AuditLog entry (if audit logging enabled)
+
+Example from sample_data.csv (15 rows):
+- Transactions: 15
+- Alerts: 10 (rows with final_risk > 0.75)
+
+IDEMPOTENCY
+-----------
+
+The command is IDEMPOTENT - safe to run multiple times:
+- Skips caseid values that already exist
+- Won't create duplicate transactions
+- Can run incrementally:
+    python manage.py seed_db --csv-path batch1.csv
+    python manage.py seed_db --csv-path batch2.csv
+
+USE --clear FLAG IF:
+- You want to replace ALL existing data
+- First time setup with clean database
+- Testing/development (non-production)
+
+DON'T USE --clear IF:
+- Adding to existing data (use without flag)
+- Production database (data loss risk!)
+- You need to preserve some records
+
+DEPENDENCIES
+------------
+
+Required:
+- Django (installed with project)
+- pandas: pip install pandas
+
+Check versions:
+- python --version
+- python -c "import django; print(django.VERSION)"
+- python -c "import pandas; print(pandas.__version__)"
+
+DATABASE MODELS REQUIRED
+------------------------
+
+Models must exist in api/models.py:
+
+Transaction model with fields:
+    caseid, age, wealth_idx, education, residence, 
+    has_diabetes, has_htn, DVS, TNS, ICS, CCS, 
+    HCFD_score, rule_score, anomaly_score, 
+    final_risk, risk_tier, explanation
+
+Alert model with fields:
+    transaction (ForeignKey), risk_tier, final_risk, 
+    message, is_resolved
+
+EXAMPLE USAGE SEQUENCE
+----------------------
+
+# 1. First time setup
+python manage.py migrate
+python manage.py seed_db \\
+    --csv-path api/management/commands/sample_data.csv \\
+    --clear
+
+# 2. Verify data
+python manage.py shell < verify_seed.py
+
+# 3. Check in Django admin
+python manage.py runserver
+# Visit http://localhost:8000/admin/
+
+# 4. Add more data (idempotent)
+python manage.py seed_db --csv-path new_data.csv
+
+# 5. Replace all data
+python manage.py seed_db --csv-path replacement_data.csv --clear
+
+# 6. Backup before production
+python manage.py dumpdata > backup.json
+python manage.py dumpdata --natural-foreign --natural-primary > backup.json
+
+# 7. Load backup if needed
+python manage.py flush
+python manage.py loaddata backup.json
+
+TROUBLESHOOTING FLOWCHART
+-------------------------
+
+Problem: Not working?
+├─ Does manage.py exist? No → Wrong directory
+├─ Django installed? No → pip install django
+├─ pandas installed? No → pip install pandas
+├─ CSV file exists? No → Check path
+├─ CSV has headers? No → Add header row
+├─ Age is number? No → Fix data type
+├─ risk_tier valid? No → Use low/medium/high/critical
+└─ Still broken? → See SEED_DB_GUIDE.md
+
+QUICK TEST
+----------
+
+Test in < 1 minute:
+    python manage.py seed_db \\
+        --csv-path api/management/commands/sample_data.csv \\
+        --clear
+    python manage.py shell -c \\
+        "from models import Transaction; print(Transaction.objects.count())"
+
+Expected output: 15 (sample has 15 test records)
+
+SUPPORT RESOURCES
+-----------------
+
+- README.txt - This file
+- SEED_DB_GUIDE.md - Complete documentation
+- sample_data.csv - Example CSV format
+- verify_seed.py - Verification script
+- run_seed_db.sh - Linux/Mac helper
+- run_seed_db.bat - Windows helper
+
+More info:
+    python manage.py help seed_db
+    python manage.py seed_db --help
+
+For Django issues: https://docs.djangoproject.com/
+For pandas issues: https://pandas.pydata.org/docs/
+
+FINAL CHECKLIST BEFORE PRODUCTION
+---------------------------------
+
+✓ Tested with sample data
+✓ Tested with actual data (--limit flag)
+✓ Verified records loaded correctly
+✓ Checked database backup works
+✓ Verified Alert creation (final_risk > 0.75)
+✓ Tested idempotent loading
+✓ Confirmed no data corruption
+✓ Documented load process
+✓ Set up monitoring/alerting
+✓ Have rollback plan (backup)
+
+Ready to deploy!
+"""

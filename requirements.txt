@@ -1,0 +1,60 @@
+# Django & Web Framework
+Django==6.0.6
+djangorestframework==3.14.0
+djangorestframework-simplejwt==5.5.1
+django-cors-headers==4.3.1
+
+# Database
+psycopg2-binary==2.9.9  # PostgreSQL adapter
+
+# Environment & Configuration
+python-decouple==3.8
+
+# PDF Generation
+reportlab==4.0.9
+
+# Data Processing
+pandas==2.2.0
+numpy==1.26.4
+
+# Machine Learning (for model loading)
+joblib==1.3.2
+scikit-learn==1.3.2
+
+# HTTP Requests
+requests==2.31.0
+httpx==0.25.1
+
+# Development & Testing
+pytest==7.4.3
+pytest-django==4.7.0
+black==23.12.0
+flake8==6.1.0
+isort==5.13.2
+
+# Production Server
+gunicorn==21.2.0
+whitenoise==6.6.0
+
+# Caching (optional)
+django-redis==5.4.0
+redis==5.0.1
+
+# Monitoring & Logging
+django-extensions==3.2.3
+python-json-logger==2.0.7
+
+# Security & Validation
+djangorestframework-jwt==1.11.0
+django-ratelimit==4.1.0
+
+# Serialization
+pyyaml==6.0.1
+
+# Task Queue (optional)
+celery==5.3.4
+django-celery-beat==2.5.0
+
+# Documentation (optional)
+drf-spectacular==0.27.0
+drf-yasg==1.21.7
